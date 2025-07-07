@@ -1,10 +1,17 @@
 # ────── 1️⃣  BUILD STAGE ───────────────────────────────────────
-FROM node
+FROM node:18
+
 WORKDIR /app
 
-# copy only package manifests first, so dependencies are cached
-COPY . /app
+# Copy package files and install dependencies
+COPY package*.json ./
 RUN npm install
 
+# Now copy rest of the app
+COPY . .
+
+# Expose Vite's dev server port
 EXPOSE 5173
-CMD ["npm", "run","start"]
+
+# Start Vite dev server with host binding
+CMD ["npm", "run", "dev", "--", "--host"]
